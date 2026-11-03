@@ -1,0 +1,53 @@
+server:
+  port: ${PORT:5300}
+  error:
+    include-message: never
+    include-stacktrace: never
+
+spring:
+  application:
+    name: pdp-api-java
+  mvc:
+    problemdetails:
+      enabled: false
+  jackson:
+    default-property-inclusion: non_null
+
+pdp:
+  policy-store:
+    # The PAP's data folder; the default suits running both Java services from their project folders
+    folder: ${PDP_POLICY_FOLDER:../pap-api-java/data}
+    refresh-interval: 2s
+  max-batch-size: 100
+  clients:
+    # One entry per PEP application. Override the key with PDP_API_KEY (or replace the list) outside development.
+    - name: development
+      api-key: ${PDP_API_KEY:dev-pdp-key-change-me}
+      domains: []
+  cors:
+    allowed-origin-patterns: []
+
+management:
+  health:
+    # The PDP never writes to disk, and the public health output should not reveal server paths
+    diskspace:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /swagger/v1/swagger.json
+  swagger-ui:
+    path: /swagger
+
+logging:
+  level:
+    root: INFO
+    # Decision audit trail (client, domain, decision, latency)
+    com.pdp.audit: INFO

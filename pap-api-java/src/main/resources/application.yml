@@ -1,0 +1,37 @@
+server:
+  # 5200 is the React UI's default API address (VITE_API_URL overrides it on the UI side)
+  port: ${PORT:5200}
+  error:
+    include-message: never
+    include-stacktrace: never
+
+spring:
+  application:
+    name: pap-api-java
+  mvc:
+    problemdetails:
+      enabled: false
+  jackson:
+    default-property-inclusion: non_null
+
+pap:
+  jwt:
+    secret: ${PAP_JWT_SECRET:PAP_SUPER_SECRET_JWT_KEY_CHANGE_IN_PRODUCTION_1234567890}
+    access-token-expiry-hours: 2
+    refresh-token-expiry-days: 7
+  data-store:
+    folder: ${PAP_DATA_FOLDER:data}
+  cors:
+    allowed-origin-patterns:
+      - http://localhost:5173
+      - https://app-pap-ui-*.azurewebsites.net
+
+springdoc:
+  api-docs:
+    path: /swagger/v1/swagger.json
+  swagger-ui:
+    path: /swagger
+
+logging:
+  level:
+    root: INFO
